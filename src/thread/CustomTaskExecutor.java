@@ -46,6 +46,8 @@ public class CustomTaskExecutor implements Runnable {
 				exec.createTable(connection,"analysis", val);
 				DataSource.returnConnection(connection);
 			} else {
+				exec.insertInTable(connection,"records",fo.getContentAtLine(this.position));
+				exec.insertInTable(connection,"lastread",Thread.currentThread().getName() + "," +this.position.toString());
 				DataSource.returnConnection(connection);
 			}
 		} finally {

@@ -46,9 +46,18 @@ public class ExecuteStatements {
 
 	}
 
-	public String insertInTable() {
-		String createStatement = null;
-		return createStatement;
+	public void insertInTable(Connection connection, String tableName, String val) {
+		try {
+			Statement s = connection.createStatement();
+			String Query = "Insert into " + tableName +" values ('" + val.toString() +"');";
+			
+			Query = Query.replaceAll("(?<=,)(?=,)", "null");
+			Query = Query.replaceAll(",", "','");
+			s.executeQuery(Query);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	public List<String> getColumns() {
@@ -71,7 +80,6 @@ public class ExecuteStatements {
 				}
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return tExists;
