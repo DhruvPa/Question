@@ -22,8 +22,9 @@ public class CustomTaskExecutor implements Runnable {
 	@Override
 	public void run() {
 		try {
+			//System.out.println("CustomTaskExecutor Started by position :" + position);
 			executeTask();
-
+			//System.out.println("CustomTaskExecutor Started by position :" + position);
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} catch (SQLException e) {
@@ -34,22 +35,18 @@ public class CustomTaskExecutor implements Runnable {
 	}
 
 	private synchronized void executeTask() throws ClassNotFoundException, SQLException, CustomException {
-		connection = DataSource.getConnection();
+		
 		fo = FileOperations.FileOperations(
 				"C:\\\\Users\\\\e01612\\\\Desktop\\\\interview\\\\us-accidents\\\\US_Accidents_May19.csv");
+		connection = DataSource.Connection();
 		exec = ExecuteStatements.ExecuteStatements();
 
 		try {
 
-			if (!exec.checkTableExists(connection, "analysis")) {
-				String val = "field1,field2";
-				exec.createTable(connection,"analysis", val);
-				DataSource.returnConnection(connection);
-			} else {
-				exec.insertInTable(connection,"records",fo.getContentAtLine(this.position));
-				exec.insertInTable(connection,"lastread",Thread.currentThread().getName() + "," +this.position.toString());
-				DataSource.returnConnection(connection);
-			}
+			exec.insertInTable(connection, "records", fo.getContentAtLine(this.position));
+			exec.insertInTable(connection, "lastread",
+					Thread.currentThread().getName() + "," + this.position.toString());
+			DataSource.returnConnection(connection);
 		} finally {
 			DataSource.returnConnection(connection);
 		}

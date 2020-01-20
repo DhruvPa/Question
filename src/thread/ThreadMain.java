@@ -52,8 +52,6 @@ public class ThreadMain {
 					e.printStackTrace();
 				}
 			}
-
-			System.out.println("Done");
 		} else {
 			throw new CustomException("No Task Submitted to process");
 		}
